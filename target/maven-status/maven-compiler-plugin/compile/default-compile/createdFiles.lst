@@ -1,0 +1,13 @@
+com/mraleksmay/projects/download_manager/plugin/youtube/model/download/YoutubeDownload.class
+com/mraleksmay/projects/download_manager/plugin/youtube/util/image/ImageWorker.class
+com/mraleksmay/projects/download_manager/plugin/youtube/view/dialog/AddYoutubeDownloadDialog$1.class
+com/mraleksmay/projects/download_manager/plugin/youtube/model/download/Base64AuthorizationData.class
+com/mraleksmay/projects/download_manager/plugin/youtube/view/dialog/AddYoutubeDownloadDialog$2.class
+com/mraleksmay/projects/download_manager/plugin/youtube/model/group/YoutubeGroup.class
+com/mraleksmay/projects/download_manager/plugin/youtube/model/download/YotubeDownloadFormatter.class
+com/mraleksmay/projects/download_manager/plugin/youtube/view/dialog/AddYoutubeDownloadDialog$3.class
+com/mraleksmay/projects/download_manager/plugin/youtube/view/dialog/AddYoutubeDownloadDialog.class
+com/mraleksmay/projects/download_manager/plugin/youtube/view/dialog/AddYoutubeDialogUIWorker.class
+com/mraleksmay/projects/download_manager/plugin/youtube/model/plugin/YoutubePlugin.class
+com/mraleksmay/projects/download_manager/plugin/youtube/model/download/YouTubeVideoFormat.class
+com/mraleksmay/projects/download_manager/plugin/youtube/model/category/YoutubeCategory.class
