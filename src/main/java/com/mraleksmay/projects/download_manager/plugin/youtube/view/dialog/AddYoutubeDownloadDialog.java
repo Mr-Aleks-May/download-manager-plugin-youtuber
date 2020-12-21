@@ -15,18 +15,20 @@ import com.github.kiulian.downloader.parser.DefaultParser;
 import com.mraleksmay.projects.download_manager.common.event.ListDataAdapter;
 import com.mraleksmay.projects.download_manager.common.exception.ThreadAlreadyStartException;
 import com.mraleksmay.projects.download_manager.common.exception.ThreadAlreadyStopException;
-import com.mraleksmay.projects.download_manager.common.model.category.Category;
+import com.mraleksmay.projects.download_manager.common.util.DownloadUtil;
 import com.mraleksmay.projects.download_manager.common.util.date.TimeUtil;
 import com.mraleksmay.projects.download_manager.common.util.downloader.NetworkUtil;
-import com.mraleksmay.projects.download_manager.common.model.download.Download;
 import com.mraleksmay.projects.download_manager.common.util.file.FileWorker;
 import com.mraleksmay.projects.download_manager.common.util.image.ImageWorker;
 import com.mraleksmay.projects.download_manager.common.view.*;
 import com.mraleksmay.projects.download_manager.common.view.component.ImagePanel;
 import com.mraleksmay.projects.download_manager.plugin.annotations.DMPlugin;
 import com.mraleksmay.projects.download_manager.plugin.manager.PluginDataManager;
+import com.mraleksmay.projects.download_manager.plugin.model.category.Category;
+import com.mraleksmay.projects.download_manager.plugin.model.download.Download;
 import com.mraleksmay.projects.download_manager.plugin.youtube.model.download.YouTubeVideoFormat;
 import com.mraleksmay.projects.download_manager.plugin.youtube.model.download.YoutubeDownload;
+
 
 import java.awt.*;
 import java.awt.event.*;
@@ -81,12 +83,13 @@ public class AddYoutubeDownloadDialog extends ADialog implements DownloadDialog 
 
                 if (!isUserChangeName()) {
                     String fileNameStr = details.title();
-                    fileNameStr = Download.getFileName(fileNameStr);
+                    fileNameStr = DownloadUtil.suggestNameFromName(fileNameStr);
 
                     getDownloadInformation().setFileName(fileNameStr);
                     getJTF_name().setText(getDownloadInformation().getFileName());
                     getJTF_path().setText(getDownloadInformation().getFullPathToFile().getCanonicalPath());
                 }
+
 
                 final JComboBox jcb_quality = getJCB_quality();
                 final DefaultComboBoxModel jcb_quality_model = (DefaultComboBoxModel) jcb_quality.getModel();
@@ -283,6 +286,7 @@ public class AddYoutubeDownloadDialog extends ADialog implements DownloadDialog 
                 getJLBL_size().setText(size);
                 getJLBL_duration().setText(duration);
                 getDownloadInformation().setUrl(new URL(url));
+                getDownloadInformation().setFullSize(format.contentLength());
             } catch (MalformedURLException e) {
             }
 
@@ -563,7 +567,6 @@ public class AddYoutubeDownloadDialog extends ADialog implements DownloadDialog 
         this.downloadInformation = downloadInformation;
     }
 
-    @Override
     public Download getDownload() {
         return download;
     }

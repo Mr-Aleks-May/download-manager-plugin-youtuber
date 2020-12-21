@@ -1,8 +1,8 @@
 package com.mraleksmay.projects.download_manager.plugin.youtube.model.download;
 
 
-import com.mraleksmay.projects.download_manager.common.model.download.AuthenticationData;
 import com.mraleksmay.projects.download_manager.plugin.annotations.DMPlugin;
+import com.mraleksmay.projects.download_manager.plugin.model.download.AuthenticationData;
 
 import java.nio.charset.Charset;
 import java.util.Base64;

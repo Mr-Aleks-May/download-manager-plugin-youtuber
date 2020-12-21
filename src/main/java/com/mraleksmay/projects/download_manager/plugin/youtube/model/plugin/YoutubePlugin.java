@@ -1,15 +1,29 @@
 package com.mraleksmay.projects.download_manager.plugin.youtube.model.plugin;
 
-import com.mraleksmay.projects.download_manager.common.model.category.Category;
-import com.mraleksmay.projects.download_manager.common.model.group.Group;
-import com.mraleksmay.projects.download_manager.common.model.plugin.Plugin;
 import com.mraleksmay.projects.download_manager.plugin.annotations.DMPlugin;
+import com.mraleksmay.projects.download_manager.plugin.io.mapper.category.CategoryMapper;
+import com.mraleksmay.projects.download_manager.plugin.io.mapper.category.SCategoryMapper;
+import com.mraleksmay.projects.download_manager.plugin.io.mapper.download.DownloadMapper;
+import com.mraleksmay.projects.download_manager.plugin.io.mapper.download.SDownloadMapper;
+import com.mraleksmay.projects.download_manager.plugin.io.mapper.group.GroupMapper;
+import com.mraleksmay.projects.download_manager.plugin.io.mapper.plugin.PluginMapper;
+import com.mraleksmay.projects.download_manager.plugin.model.category.Category;
+import com.mraleksmay.projects.download_manager.plugin.model.group.Group;
+import com.mraleksmay.projects.download_manager.plugin.model.plugin.Plugin;
+import com.mraleksmay.projects.download_manager.plugin.youtube.communication.mapper.YoutubeSCategoryMapper;
+import com.mraleksmay.projects.download_manager.plugin.youtube.communication.mapper.YoutubeSDownloadMapper;
+import com.mraleksmay.projects.download_manager.plugin.youtube.io.mapper.category.YoutubeCategoryMapper;
+import com.mraleksmay.projects.download_manager.plugin.youtube.io.mapper.download.YoutubeDownloadMapper;
+import com.mraleksmay.projects.download_manager.plugin.youtube.io.mapper.group.YoutubeGroupMapper;
+import com.mraleksmay.projects.download_manager.plugin.youtube.io.mapper.plugin.YoutubePluginMapper;
 import com.mraleksmay.projects.download_manager.plugin.youtube.model.category.YoutubeCategory;
 import com.mraleksmay.projects.download_manager.plugin.youtube.model.group.YoutubeGroup;
 import com.mraleksmay.projects.download_manager.plugin.youtube.view.dialog.AddYoutubeDownloadDialog;
 
+import javax.swing.*;
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,9 +31,9 @@ import java.util.List;
 @DMPlugin
 public class YoutubePlugin extends Plugin {
     {
-        addSupportedWebSiteRegex("youtube.com");
-        addSupportedWebSiteRegex("youtu.be");
-        setPluginPriority(10000);
+        add("youtube.com");
+        add("youtu.be");
+        setPriority(10000);
     }
 
 
@@ -29,15 +43,14 @@ public class YoutubePlugin extends Plugin {
 
     private YoutubePlugin(String id, String name) {
         super(id, name);
-        setSerializableId("PLUGIN-YOUTUBE-" + id);
+        setPSID("PLUGIN-YOUTUBE-" + id);
     }
 
 
     @Override
-    public void init() throws IOException {
+    public Plugin init() throws IOException {
         final Plugin plugin = this;
         plugin.setUserCanDownloadLater(false);
-        plugin.setDownloadDialogClass(AddYoutubeDownloadDialog.class);
 
         final Group all = new YoutubeGroup("YOUTUBE", "Youtube", plugin);
         final String userHomeDir = System.getenv("HOME");
@@ -104,6 +117,32 @@ public class YoutubePlugin extends Plugin {
                 group.add(categ0ry);
             }
         }
+
+        return this;
+    }
+
+    @Override
+    public boolean canDeserialize(String psid, String version) {
+        return false;
+    }
+
+    @Override
+    public boolean canDeserializeIgnoreVersion(String psid) {
+        return false;
+    }
+
+    @Override
+    public JDialog getAddDownloadDialogWindow(Class<?>[] constructorArgsType, Object[] constructorParams) throws Exception {
+        final Class<? extends JDialog> dialogClass = this.getAddDownloadDialogWindowClass();
+        final Constructor<? extends JDialog> dialogConstructor = dialogClass.getDeclaredConstructor(constructorArgsType);
+        final JDialog dialog = dialogConstructor.newInstance(constructorParams);
+
+        return dialog;
+    }
+
+    @Override
+    public Class<? extends JDialog> getAddDownloadDialogWindowClass() {
+        return AddYoutubeDownloadDialog.class;
     }
 
 
@@ -120,5 +159,50 @@ public class YoutubePlugin extends Plugin {
         }
 
         return null;
+    }
+
+    @Override
+    public Class<? extends Plugin> getPluginClass() {
+        return this.getClass();
+    }
+
+    @Override
+    public PluginMapper getPluginMapper() {
+        return new YoutubePluginMapper();
+    }
+
+    @Override
+    public GroupMapper getGroupMapper() {
+        return new YoutubeGroupMapper();
+    }
+
+    @Override
+    public CategoryMapper getCategoryMapper() {
+        return new YoutubeCategoryMapper();
+    }
+
+    @Override
+    public DownloadMapper getDownloadMapper() {
+        return new YoutubeDownloadMapper();
+    }
+
+    @Override
+    public SDownloadMapper getSDownloadMapper() {
+        return new YoutubeSDownloadMapper(new YoutubeSCategoryMapper());
+    }
+
+    @Override
+    public SCategoryMapper getSCategoryMapper() {
+        return new YoutubeSCategoryMapper();
+    }
+
+    @Override
+    public Group getDefGroup() {
+        return new YoutubeGroup();
+    }
+
+    @Override
+    public Category getDefCategory() {
+        return new YoutubeCategory();
     }
 }
